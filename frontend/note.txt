@@ -1,0 +1,3 @@
+1- we downladed a theme in the file bootstrap.min.css from bootswatch to get access to different styling that boostrap gives us access to
+so we dont need to do npm install react-bootstrap bootstrap but just npm install react-bootstrap
+2-npm install react-router-dom react-router-bootstrap  we added router bootsrap
