@@ -1,14 +1,14 @@
 import React from 'react'
-import {Container,Col,Row  } from 'react-bootstrap'
+import {Container,Col,Row,Button  } from 'react-bootstrap'
 function Footer() {
     return (
-        <footer>
-            
+        <footer className=' my-0 bg-dark text-white'>
+           
 
-            <Container>
+            <Container bg="dark" variant="dark" expand="lg">
                 
-                <Row >
-              <Col className="text-center py-3">
+                <Row bg="dark">
+              <Col className="text-center py-3" bg="dark">
                 Copyright &copy; ShopsDZ
                 </Col>
                 </Row>

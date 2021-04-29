@@ -14,6 +14,31 @@ const magasins = [
     'Fermeture': '23:00',
     'image': '/images/shop-standart.jpg',
     'numReviews': 12,
+    'produits':[
+      {
+        '_id':'1',
+        'nom':'Miel Algérie',
+        'image':'/images/produit-standard.jpg',
+        'prix':100,
+      },
+      {
+        '_id':'2',
+        'nom':'Dattes Algérie',
+        'image':'/images/produit-standard.jpg',
+        'prix':200,
+      },
+      {
+        '_id':'3',
+        'nom':'Miel Algérie',
+        'image':'/images/produit-standard.jpg',
+        'prix':100,
+      },     
+       {  '_id':'4',
+        'nom':'Miel Algérie',
+        'image':'/images/produit-standard.jpg',
+        'prix':100,
+      },
+    ],
   },
   {
     '_id': '2',
@@ -30,6 +55,21 @@ const magasins = [
     'Fermeture': '23:00',
     'image': '/images/shop-standart.jpg',
     'numReviews': 10,
+    'produits':[
+      {
+        '_id':'1',
+        'nom':'Miel Algérie',
+        'image':'/images/produit-standard.jpg',
+        'prix':100,
+      },
+      {
+        '_id':'1',
+        'nom':'Miel Algérie',
+        'image':'/images/produit-standard.jpg',
+        'prix':100,
+      },
+      
+    ],
   },
   {  				
     '_id': '3',
