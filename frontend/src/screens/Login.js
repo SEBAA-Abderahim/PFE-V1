@@ -2,8 +2,10 @@ import React,{useState} from 'react'
 import {Link,Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {Form,Button} from 'react-bootstrap'
-import { login } from '../actions/auth';
-function Login({login,isAuthenticated}) {
+import { login,delete_err,delete_msg } from '../actions/auth';
+import Message from '../components/Message'
+function Login({login,isAuthenticated,error,delete_err}) {
+  
     const [formData, setFormData] = useState({
         email: '',
         password: '' 
@@ -16,17 +18,35 @@ function Login({login,isAuthenticated}) {
 
         login(email, password);
     };
+    
     //is the user authenticated
     //send them to the home page
-
+    if (isAuthenticated) {
+      return <Redirect to='/' />
+  }else{
+    {error && <Message variant='danger'>{error}</Message>}
+  }
     return (
        <div>
+         
             <Button className='btn btn-dark my-3' size="md" block>
     Se Connceter
   </Button>
+  <div Style={"display: none;"}>
+  {(() => {
+              if (error){
+        return(
+          setTimeout(function(){ delete_err(); }, 10000)
+        )}    return null;
+      })()}
+      </div>
+  {error && <Message variant='danger'>{error}</Message>
+  
+   }
+  
        <Form onSubmit={e=>onSubmit(e)}>
   <Form.Group controlId="formBasicEmail">
-    <Form.Label>Email address</Form.Label>
+    <Form.Label>Email </Form.Label>
     <Form.Control type="email" placeholder="Enter email" 
      name='email' value={email} onChange={e=>onChange(e)} required  />
     <Form.Text className="text-muted">
@@ -35,7 +55,7 @@ function Login({login,isAuthenticated}) {
   </Form.Group>
 
   <Form.Group controlId="formBasicPassword">
-    <Form.Label>Password</Form.Label>
+    <Form.Label>Mot de passe</Form.Label>
     <Form.Control type="password" placeholder="Password"
       name='password'
       value={password}
@@ -50,10 +70,10 @@ function Login({login,isAuthenticated}) {
   </Button>
 </Form>
 <p className='mt-3'>
-                Don't have an account? <Link to='/signup'>Sign Up</Link>
+                ouvrir un nouveau compte ? <Link to='/signup'>S'inscrire</Link>
             </p>
             <p className='mt-3'>
-                Forgot your Password? <Link to='/reset-password'>Reset Password</Link>
+               mot de passe oublié ? <Link to='/reset-password'>Rénitialiser le mot de passe</Link>
             </p>
        </div> 
     )
@@ -64,6 +84,7 @@ function Login({login,isAuthenticated}) {
 //});
 //The connect() function connects a React component to a Redux store.
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.auth.error
 });
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, { login,delete_err })(Login);

@@ -15,7 +15,7 @@ function HomeScreen() {
   <Carousel.Item interval={5000} style={{height:"30vw"}}>
     <img
       className="d-block w-100"
-      src="/images/slide-1.jpg"
+      src={`${process.env.REACT_APP_API_URL}/static/images/slide-1.jpg`}
       alt="First slide"
       style={{height:"30vw"}}
     />
@@ -27,7 +27,7 @@ function HomeScreen() {
   <Carousel.Item interval={5000} style={{height:"30vw"}}>
     <img
       className="d-block w-100"
-      src="/images/slide-2.jpg"
+      src={`${process.env.REACT_APP_API_URL}/static/images/slide-2.jpg`}
       alt="Second slide"
       style={{height:"30vw"}}
     />
@@ -36,7 +36,7 @@ function HomeScreen() {
   <Carousel.Item style={{height:"30vw"}} interval={5000}>
     <img
       className="d-block w-100"
-      src="/images/slide-3.jpg"
+      src={`${process.env.REACT_APP_API_URL}/static/images/slide-3.jpg`}
       alt="Third slide"
       style={{height:"30vw"}}
     />
@@ -46,7 +46,7 @@ function HomeScreen() {
   <Carousel.Item style={{height:"30vw"}} interval={5000}>
     <img
       className="d-block w-100"
-      src="/images/slide-4.jpg"
+      src={`${process.env.REACT_APP_API_URL}/static/images/slide-4.jpg`}
       alt="Third slide"
       style={{height:"30vw"}}
     />
