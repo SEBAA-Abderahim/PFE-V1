@@ -8,7 +8,7 @@ import SignUp from './screens/SignUp'
 import ResetPassword from './screens/ResetPassword'
 import ResetPasswordConfirm from './screens/ResetPasswordConfirm'
 import Activate from './screens/Activate'
-import {BrowserRouter as Router,Route,Switch  }from 'react-router-dom'
+import {BrowserRouter as Router,Route,Switch,withRouter  }from 'react-router-dom'
 import Layout from './hocs/layout';
 //for redux store
 import { Provider } from 'react-redux';
@@ -29,7 +29,7 @@ function App() {
      
           <Layout>
                 <Switch>
-            <Route path='/' component={HomeScreen} exact/>
+            <Route path='/' component={HomeScreen}  exact/>
             <Route path='/magasin/:id' component={ShopScreen} />
             <Route path='/login' component={Login} />
             <Route path='/activate/:uid/:token' component={Activate} />

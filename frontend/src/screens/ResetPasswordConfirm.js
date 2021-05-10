@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { reset_password_confirm ,delete_err,delete_msg,create_msg,create_err} from '../actions/auth';
 import {Form,Button} from 'react-bootstrap'
 import Message from '../components/Message';
-function ResetPasswordConfirm({ match, reset_password_confirm ,error,message,delete_err,delete_msg,create_msg,create_err}) {
+function ResetPasswordConfirm({ match, reset_password_confirm ,error,message,delete_err,delete_msg,create_msg,create_err,isAuthenticated}) {
     const [requestSent, setRequestSent] = useState(false);
     const [formData, setFormData] = useState({
         new_password: '',
@@ -32,6 +32,9 @@ function ResetPasswordConfirm({ match, reset_password_confirm ,error,message,del
         return <Redirect to='/' />
     }
     */
+    if (isAuthenticated) {
+      return <Redirect to='/' />
+  }
     return (
         <div>
 
@@ -97,6 +100,7 @@ function ResetPasswordConfirm({ match, reset_password_confirm ,error,message,del
 const mapStateToProps = state => ({
 
     error: state.auth.error,
-    message: state.auth.message
+    message: state.auth.message,
+    isAuthenticated: state.auth.isAuthenticated
   });
 export default connect(mapStateToProps, { reset_password_confirm,delete_err,delete_msg,create_msg,create_err })(ResetPasswordConfirm)

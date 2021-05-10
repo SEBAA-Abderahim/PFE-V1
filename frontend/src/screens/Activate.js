@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { verify } from '../actions/auth';
 import Message from '../components/Message';
 import {Form,Button} from 'react-bootstrap'
-function Activate({ verify, match }) {
+function Activate({ verify, match,isAuthenticated }) {
     const [verified, setVerified] = useState(false);
 
     const verify_account = e => {
@@ -17,6 +17,9 @@ function Activate({ verify, match }) {
     };
     if (verified) {
         return <Redirect to='/login' />
+    }
+    if (isAuthenticated) {
+        return <Redirect to='/' />
     }
     return (
         <div>
@@ -37,6 +40,10 @@ function Activate({ verify, match }) {
         </div>
     )
 }
+const mapStateToProps = state => ({
 
-export default connect(null, { verify })(Activate);
+
+    isAuthenticated: state.auth.isAuthenticated
+  });
+export default connect(mapStateToProps, { verify })(Activate);
 

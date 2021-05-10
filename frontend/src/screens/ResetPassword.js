@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useHistory } from "react-router-dom";
 import Message from '../components/Message';
-function ResetPassword({ reset_password,error,message,delete_err,delete_msg}) {
+function ResetPassword({ reset_password,error,message,delete_err,delete_msg,isAuthenticated}) {
     const [requestSent, setRequestSent] = useState(false);
     const [formData, setFormData] = useState({
         email: ''
@@ -27,7 +27,9 @@ function ResetPassword({ reset_password,error,message,delete_err,delete_msg}) {
     //const notify = () => toast(" check your email !");
    /* //let history =// useHistory();*/
       
-  
+   if (isAuthenticated) {
+    return <Redirect to='/' />
+}
     return (
         <div>
          
@@ -77,6 +79,7 @@ Rénetialiser le mot de passe
 const mapStateToProps = state => ({
 
     error: state.auth.error,
-    message: state.auth.message
+    message: state.auth.message,
+    isAuthenticated: state.auth.isAuthenticated
   });
 export default connect(mapStateToProps, { reset_password,delete_err,delete_msg })(ResetPassword)
