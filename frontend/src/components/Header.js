@@ -37,7 +37,7 @@ function Header({ logout, isAuthenticated ,user}) {
           <a className='nav-link' href='#!' ><i class="fas fa-user"></i>{user?user.username:""}</a>
       </li>
       <li className='nav-item'>
-    <a className='nav-link' href='#' onClick={logout_user}><i class="fas fa-sign-out-alt"></i>Logout</a>
+    <a className='nav-link' href='/' onClick={logout_user}><i class="fas fa-sign-out-alt"></i>Logout</a>
 </li>
       </Fragment>
 
