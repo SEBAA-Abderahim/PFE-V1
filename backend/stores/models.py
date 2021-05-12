@@ -54,3 +54,77 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def __str__(self):
         return f'{self.id}-Email: {self.email}   | Username: {self.username}  | created at: {self.created_at}'
+
+
+class Wilayas(models.Model):
+    code = models.IntegerField()
+    nom = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.nom
+
+class Communes(models.Model):
+    code_postal = models.CharField(max_length=255)
+    nom = models.CharField(max_length=255)
+    wilaya = models.ForeignKey(Wilayas,null=True ,on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return self.nom
+
+class Categorie(models.Model):
+    nom = models.CharField(max_length=56)
+    _id = models.AutoField(primary_key=True, editable=False)
+    def __str__(self):
+        return self.nom
+
+class Magasin(models.Model):
+    nom = models.CharField(max_length=56)
+    adresse = models.CharField(max_length=70,blank=True, null=True)
+    telephone = models.CharField(max_length=17, blank=True, null=True)
+    latitude = models.FloatField(null=True, blank=True,default=0.0)
+    longitude = models.FloatField(null=True, blank=True,default=0.0)
+    overture = models.TimeField(null=True, blank=True)
+    fermeture = models.TimeField(null=True, blank=True)
+    rating = models.DecimalField(
+    max_digits=7, decimal_places=2, null=True, blank=True)
+    numReviews = models.IntegerField(null=True, blank=True, default=0)
+    image = models.ImageField(null=True, blank=True,default='/shop-standart.jpg')
+    date_created=models.DateTimeField(auto_now_add=True,null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,blank=True)
+    categorie = models.ForeignKey(Categorie, on_delete=models.SET_NULL, null=True,blank=True)
+    commune = models.ForeignKey(Communes, on_delete=models.SET_NULL, null=True,blank=True)
+    _id = models.AutoField(primary_key=True, editable=False)
+    def __str__(self):
+        return self.nom
+
+class Produit(models.Model):
+    nom = models.CharField(max_length=56)
+    image = models.ImageField(null=True, blank=True,default='/produit-standard.jpg')
+    date_created=models.DateTimeField(auto_now_add=True,null=True)
+    categorie = models.ForeignKey(Categorie, on_delete=models.SET_NULL, null=True,blank=True)
+    _id = models.AutoField(primary_key=True, editable=False)
+    def __str__(self):
+        return self.nom
+
+class ProduitMag(models.Model):
+    produit = models.ForeignKey(Produit, on_delete=models.CASCADE)
+    magasin = models.ForeignKey(Magasin, on_delete=models.CASCADE)
+    prix = models.DecimalField(
+        max_digits=7, decimal_places=2, null=True, blank=True)
+    date_created=models.DateTimeField(auto_now_add=True,null=True)
+    _id = models.AutoField(primary_key=True, editable=False)
+
+    def __str__(self):
+        return str(self.produit.nom)
+
+class Review(models.Model):
+    magasin = models.ForeignKey(Magasin, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=200, null=True, blank=True)
+    rating = models.IntegerField(null=True, blank=True, default=0)
+    comment = models.TextField(null=True, blank=True)
+    date_created=models.DateTimeField(auto_now_add=True,null=True)
+    _id = models.AutoField(primary_key=True, editable=False)
+
+    def __str__(self):
+        return str(self.rating)

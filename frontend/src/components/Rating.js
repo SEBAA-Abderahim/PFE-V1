@@ -66,6 +66,6 @@ function Rating({ value, text, color }) {
             <span>{text && text}</span>
         </div>
     )
-}
+} 
 
 export default Rating
