@@ -7,11 +7,11 @@ function Produit({produit}) {
     return (
         <Card className="my-3    rounded"  >
            
-            <Card.Img variant="top" src={produit.image} style={{height:"15vw"}}/>
+            <Card.Img variant="top" src={process.env.REACT_APP_API_URL+'/static'+produit.produit_nom.image} style={{height:"15vw"}}/>
          <Card.Body>
       
             <Card.Title  as="div">
-             <strong >{produit.nom}</strong>  
+             <strong >{produit.produit_nom.nom}</strong>  
                 </Card.Title>
         
          

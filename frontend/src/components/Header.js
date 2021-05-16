@@ -5,6 +5,7 @@ import {LinkContainer} from 'react-router-bootstrap'
 import { connect } from 'react-redux';
 import { logout } from '../actions/auth'
 import { Link, Redirect } from 'react-router-dom';
+import SearchBox from './SearchBox'
 //gett icons from here https://cdnjs.com/ and then copy font awsome tag ling in index.html
 //user icon https://fontawesome.com/icons/user?style=solid
 function Header({ logout, isAuthenticated ,user}) {
@@ -53,6 +54,7 @@ function Header({ logout, isAuthenticated ,user}) {
   </LinkContainer>
   <Navbar.Toggle aria-controls="basic-navbar-nav" />
   <Navbar.Collapse  className="justify-content-start">
+  <SearchBox />
     <Nav className= "ml-auto">
     {isAuthenticated ? authLinks() : guestLinks()}
 
