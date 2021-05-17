@@ -73,7 +73,7 @@ class MagasinSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
     def get_reviews(self, obj):
-        reviews = obj.review_set.all()
+        reviews = obj.review_set.order_by('-date_created') 
         serializer = ReviewSerializer(reviews, many=True)
         return serializer.data
     

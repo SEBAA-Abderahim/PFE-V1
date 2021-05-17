@@ -4,7 +4,14 @@ import {
     MAGASIN_LIST_FAIL,
     MAGASIN_DETAILS_REQUEST,
     MAGASIN_DETAILS_SUCCESS,
-    MAGASIN_DETAILS_FAIL
+    MAGASIN_DETAILS_FAIL,
+    MAGASIN_CREATE_REVIEW_REQUEST,
+    MAGASIN_CREATE_REVIEW_SUCCESS,
+    MAGASIN_CREATE_REVIEW_FAIL,
+    MAGASIN_CREATE_REVIEW_RESET,
+    DELETE_MESSAGE_MAG,
+    DELETE_ERROR_MAG
+
 } from '../actions/types';
 
 
@@ -40,6 +47,35 @@ export const magasinDetailsReducer = (state = { magasin: { reviews: [],produits:
         case MAGASIN_DETAILS_FAIL:
             return { loading: false, error: action.payload }
 
+        default:
+            return state
+    }
+}
+
+//review
+export const magasinReviewCreateReducer = (state = {}, action) => {
+    switch (action.type) {
+        case MAGASIN_CREATE_REVIEW_REQUEST:
+            return { loading: true }
+
+        case MAGASIN_CREATE_REVIEW_SUCCESS:
+            return { loading: false, success: true, }
+
+        case MAGASIN_CREATE_REVIEW_FAIL:
+            return { loading: false, error: action.payload }
+
+        case MAGASIN_CREATE_REVIEW_RESET:
+            return {}
+        case DELETE_MESSAGE_MAG:
+            return {
+                ...state,
+                success: false
+            }
+        case DELETE_ERROR_MAG:
+            return{
+              
+                    error: null
+            }
         default:
             return state
     }
