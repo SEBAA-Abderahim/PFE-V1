@@ -10,7 +10,10 @@ import {
     MAGASIN_CREATE_REVIEW_SUCCESS,
     MAGASIN_CREATE_REVIEW_FAIL,
     DELETE_MESSAGE_MAG,
-    DELETE_ERROR_MAG
+    DELETE_ERROR_MAG,
+    MAGASIN_CREATE_VISITE_REQUEST,
+    MAGASIN_CREATE_VISITE_SUCCESS,
+    MAGASIN_CREATE_VISITE_FAIL,
 
 
 } from './types';
@@ -107,3 +110,40 @@ export const delete_errMag=() => dispatch => {
         type: DELETE_ERROR_MAG
     });
 };
+
+//visite create action
+export const createMagasinVisite = (magasinId, time) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: MAGASIN_CREATE_VISITE_REQUEST
+        })
+
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `JWT ${localStorage.getItem('access')}`
+            }
+        }
+
+        const { data } = await axios.post(
+            `${process.env.REACT_APP_API_URL}/api/magasins/${magasinId}/visites/`,
+            time,
+            config
+        )
+        dispatch({
+            type: MAGASIN_CREATE_VISITE_SUCCESS,
+            payload: data,
+        })
+
+
+
+    } catch (error) {
+        dispatch({
+            type: MAGASIN_CREATE_VISITE_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}

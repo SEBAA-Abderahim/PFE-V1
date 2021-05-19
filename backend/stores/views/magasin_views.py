@@ -1,3 +1,4 @@
+
 from django.shortcuts import render
 
 from rest_framework.decorators import api_view, permission_classes
@@ -5,11 +6,12 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from stores.models import Magasin,Review
+from stores.models import Magasin,Review,Visite
 from stores.serializers import MagasinSerializer,MagasinsSerializer
 
 from rest_framework import status
-from datetime import datetime
+from django.utils import timezone
+import datetime
 
 
 @api_view(['GET'])
@@ -73,7 +75,7 @@ def createMagasinReview(request, pk):
             reviwtoupdate.name=user.username
             reviwtoupdate.rating=data['rating']
             reviwtoupdate.comment=data['comment']
-            reviwtoupdate.date_created=datetime.now()
+            reviwtoupdate.date_created=timezone.now()
             reviwtoupdate.save()
         else:
             review = Review.objects.create(
@@ -95,3 +97,20 @@ def createMagasinReview(request, pk):
         magasin.save()
 
         return Response('Avis ajouté')
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createMagUsVisite(request, pk):
+    user = request.user
+    magasin = Magasin.objects.get(_id=pk)
+    data = request.data
+    print(data)
+    visite = Visite.objects.create(
+          user=user,
+          magasin=magasin,
+        
+          Visite_duration=datetime.time(data['hours'],data['minutes'],data['seconds']),
+
+    )
+    return Response('Avis ajouté')

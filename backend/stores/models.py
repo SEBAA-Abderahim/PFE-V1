@@ -128,3 +128,13 @@ class Review(models.Model):
 
     def __str__(self):
         return str(self.rating)
+
+class Visite(models.Model):
+    magasin = models.ForeignKey(Magasin, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    Visite_duration = models.TimeField(null=True, blank=True)
+    date_created=models.DateTimeField(auto_now_add=True,null=True)
+    _id = models.AutoField(primary_key=True, editable=False)
+
+    def __str__(self):
+        return str(self.user.username+"|"+self.magasin.nom)

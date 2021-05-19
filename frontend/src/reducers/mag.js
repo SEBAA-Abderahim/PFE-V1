@@ -10,7 +10,11 @@ import {
     MAGASIN_CREATE_REVIEW_FAIL,
     MAGASIN_CREATE_REVIEW_RESET,
     DELETE_MESSAGE_MAG,
-    DELETE_ERROR_MAG
+    DELETE_ERROR_MAG,
+    MAGASIN_CREATE_VISITE_REQUEST,
+    MAGASIN_CREATE_VISITE_SUCCESS,
+    MAGASIN_CREATE_VISITE_FAIL,
+    MAGASIN_CREATE_VISITE_RESET
 
 } from '../actions/types';
 
@@ -76,6 +80,25 @@ export const magasinReviewCreateReducer = (state = {}, action) => {
               
                     error: null
             }
+        default:
+            return state
+    }
+}
+
+//crée visite
+export const magasinVisiteCreateReducer = (state = {}, action) => {
+    switch (action.type) {
+        case MAGASIN_CREATE_VISITE_REQUEST:
+            return { loading: true }
+
+        case MAGASIN_CREATE_VISITE_SUCCESS:
+            return { loading: false, success: true, }
+
+        case MAGASIN_CREATE_VISITE_FAIL:
+            return { loading: false, error: action.payload }
+
+        case MAGASIN_CREATE_VISITE_RESET:
+            return {}
         default:
             return state
     }

@@ -21,6 +21,11 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
         fields = '__all__'
 
+class VisiteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Visite
+        fields = '__all__'
+
 class ProduitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Produit

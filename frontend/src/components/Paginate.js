@@ -8,7 +8,8 @@ function Paginate({ pages, page, keyword = '' }) {
     }
 
     return (pages > 1 && (
-        <Pagination>
+        <Pagination   className='d-flex flex-row justify-content-center align-items-center'
+        style={{ marginTop: '20px' }}>
             {[...Array(pages).keys()].map((x) => (
                 <LinkContainer
                     key={x + 1}
