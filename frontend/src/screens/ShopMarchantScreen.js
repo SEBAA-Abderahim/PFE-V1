@@ -63,11 +63,11 @@ const delete_Magasin=async(e)=>{
     if(user){
       if(user.is_merchant){
         
-        history.replace(`/marchant/magasinslist`)}
+        window.location.replace(`/marchant/magasinslist`)}
       else{
         
        
-        history.replace(`/`)}
+        window.location.replace(`/`)}
     }
 
     
@@ -102,8 +102,16 @@ useEffect(() => {
 
 
 if (isAuthenticated==false) {
-  return <Redirect to='/' />
+  
+  history.replace('/')
+  
 }
+else{
+  if(user&&magasin.user){
+    if(user&&magasin.user!==user.id) history.replace('/')
+  }
+}
+
 
 
     return (

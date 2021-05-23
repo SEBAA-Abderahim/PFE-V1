@@ -28,7 +28,7 @@ function MagasinList({ history,user ,isAuthenticated}) {
 
     }, [dispatch,pageNum])
     if (isAuthenticated==false||(user&&!user.is_merchant)) {
-        return <Redirect to='/' />
+        history.replace('/')
     }
     return (
         <div>

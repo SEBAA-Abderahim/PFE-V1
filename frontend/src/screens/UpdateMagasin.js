@@ -185,7 +185,14 @@ const [uploading,setUploading]=useState(false)
     
     },[magasin])
     if (isAuthenticated==false) {
-      return <Redirect to='/' />
+  
+      history.replace('/')
+      
+    }
+    else{
+      if(user&&magasin.user){
+        if(user&&magasin.user!==user.id) history.replace('/')
+      }
     }
     return (
         <div>
