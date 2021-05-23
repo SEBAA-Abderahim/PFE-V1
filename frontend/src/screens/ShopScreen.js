@@ -168,7 +168,7 @@ useEffect(() => {
   <Card border="light" style={{ width: '100%' }}>
     <Card.Header><h3>{magasin.nom}</h3></Card.Header>
     <Card.Body>
-      <Card.Title><strong>Catégorie : </strong>{magasin.categorie}</Card.Title>
+      <Card.Title><strong>Catégorie : </strong>{magasin.categorie&&magasin.categorie.nom}</Card.Title>
       <ListGroup variant="flush">
     <ListGroup.Item  className="pl-0">
     <Rating value={magasin.rating} text={`${magasin.numReviews} avis`} color={'#f8e825'}></Rating>

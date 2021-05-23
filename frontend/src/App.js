@@ -8,6 +8,10 @@ import SignUp from './screens/SignUp'
 import ResetPassword from './screens/ResetPassword'
 import ResetPasswordConfirm from './screens/ResetPasswordConfirm'
 import Activate from './screens/Activate'
+import CreateMagasin from './screens/CreateMagasin'
+import UpdateMagasin from './screens/UpdateMagasin'
+import MagasinList from './screens/MagasinList'
+import ShopMarchantScreen from './screens/ShopMarchantScreen'
 import {BrowserRouter as Router,Route,Switch,withRouter  }from 'react-router-dom'
 import Layout from './hocs/layout';
 //for redux store
@@ -36,7 +40,10 @@ function App() {
             <Route path='/signup' component={SignUp} />
             <Route path='/reset-password' component={ResetPassword} />
             <Route path='/password/reset/confirm/:uid/:token' component={ResetPasswordConfirm} />
-
+            <Route path='/create-magasin' component={CreateMagasin} />
+            <Route path='/update-magasin/:id' component={UpdateMagasin} />
+            <Route path='/marchant/magasinslist' component={MagasinList} />
+            <Route path='/marchant/magasin/:id' component={ShopMarchantScreen} />
             </Switch>
             </Layout>
           

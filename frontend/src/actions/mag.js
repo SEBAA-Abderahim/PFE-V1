@@ -14,6 +14,10 @@ import {
     MAGASIN_CREATE_VISITE_REQUEST,
     MAGASIN_CREATE_VISITE_SUCCESS,
     MAGASIN_CREATE_VISITE_FAIL,
+    MAGASINMarchant_LIST_REQUEST,
+    MAGASINMarchant_LIST_SUCCESS,
+    MAGASINMarchant_LIST_FAIL
+
 
 
 } from './types';
@@ -147,3 +151,34 @@ export const createMagasinVisite = (magasinId, time) => async (dispatch, getStat
         })
     }
 }
+
+
+
+
+export const listMagasinsmarchant = (page=1) => async (dispatch) => {
+    try {
+        dispatch({ type: MAGASINMarchant_LIST_REQUEST })
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `JWT ${localStorage.getItem('access')}`
+            }
+        }
+        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/api/magasins/marchant${page}`,config)
+
+        dispatch({
+            type: MAGASINMarchant_LIST_SUCCESS,
+            payload: data
+        })
+
+    } catch (error) {
+        dispatch({
+            type: MAGASINMarchant_LIST_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}
+
+

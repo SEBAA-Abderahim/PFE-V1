@@ -45,7 +45,7 @@ function HomeScreen({ history }) {
 
                 }
             </Row>
-            <Paginate page={page} pages={pages} keyword={keyword} />
+            <Paginate page={page} pages={pages} keyword={keyword} screen="home" />
             </div>}
         </div>
     )

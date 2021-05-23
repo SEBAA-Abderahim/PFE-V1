@@ -67,12 +67,13 @@ class CategorieSerializer(serializers.ModelSerializer):
         fields = '__all__'
     def get_nom(self, obj):
         return obj.nom
-        
+    
+
 class MagasinSerializer(serializers.ModelSerializer):
     reviews = serializers.SerializerMethodField(read_only=True)
     produits = serializers.SerializerMethodField(read_only=True)
     commune = serializers.SerializerMethodField(read_only=True)
-    categorie = serializers.CharField(read_only=True)
+    categorie = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Magasin
         fields = '__all__'
@@ -93,7 +94,7 @@ class MagasinSerializer(serializers.ModelSerializer):
         return serializer.data
     
     def get_categorie(self, obj):
-        categorie = obj.categorie.nom
+        categorie = obj.categorie
         serializer = CategorieSerializer(categorie, many=False)
         return serializer.data
 
@@ -113,3 +114,10 @@ class MagasinsSerializer(serializers.ModelSerializer):
         commune = obj.commune
         serializer = CommunesSerializer(commune, many=False)
         return serializer.data
+
+
+##create magasin
+class MagasinsCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Magasin
+        fields = '__all__'

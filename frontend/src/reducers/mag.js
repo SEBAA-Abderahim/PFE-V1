@@ -14,7 +14,11 @@ import {
     MAGASIN_CREATE_VISITE_REQUEST,
     MAGASIN_CREATE_VISITE_SUCCESS,
     MAGASIN_CREATE_VISITE_FAIL,
-    MAGASIN_CREATE_VISITE_RESET
+    MAGASIN_CREATE_VISITE_RESET,
+    MAGASINMarchant_LIST_REQUEST,
+    MAGASINMarchant_LIST_SUCCESS,
+    MAGASINMarchant_LIST_FAIL,
+  
 
 } from '../actions/types';
 
@@ -103,3 +107,30 @@ export const magasinVisiteCreateReducer = (state = {}, action) => {
             return state
     }
 }
+
+
+
+//magasinmarchantreducer
+
+export const magasinListMarchantReducer = (state = { magasins: [] }, action) => {
+    switch (action.type) {
+        case MAGASINMarchant_LIST_REQUEST:
+            return { loading: true, magasins: [] }
+
+        case MAGASINMarchant_LIST_SUCCESS:
+            return {
+                loading: false,
+                magasins: action.payload.magasins,
+                page: action.payload.page,
+                pages: action.payload.pages
+            }
+
+        case MAGASINMarchant_LIST_FAIL:
+            return { loading: false, error: action.payload }
+
+        default:
+            return state
+    }
+}
+
+

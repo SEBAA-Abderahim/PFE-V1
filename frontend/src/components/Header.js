@@ -37,6 +37,16 @@ function Header({ logout, isAuthenticated ,user}) {
       <li className='nav-item'>
           <a className='nav-link' href='#!' ><i class="fas fa-user"></i>{user?user.username:""}</a>
       </li>
+      {user&&user.is_merchant?<li className='nav-item'>
+      <LinkContainer to="/marchant/magasinslist">
+          <Nav.Link ><i class="fas fa-store"></i>vos magasins</Nav.Link>
+          </LinkContainer>
+      </li>
+       :<li className='nav-item'>
+    <LinkContainer to="/create-magasin">
+          <Nav.Link ><i class="fas fa-plus-square"></i>crée mgasin</Nav.Link>
+          </LinkContainer>
+  </li>}
       <li className='nav-item'>
     <a className='nav-link' href='/' onClick={logout_user}><i class="fas fa-sign-out-alt"></i>Logout</a>
 </li>

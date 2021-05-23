@@ -1,18 +1,20 @@
 
-from django.shortcuts import render
+
+from django.shortcuts import render, resolve_url
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from stores.models import Magasin,Review,Visite
-from stores.serializers import MagasinSerializer,MagasinsSerializer
+from stores.models import Magasin,Review,Visite,Categorie, Communes,Wilayas,User
+from stores.serializers import MagasinSerializer,MagasinsSerializer,MagasinsCreateSerializer,CategorieSerializer,WilayasSerializer,CommunesSerializer
 
 from rest_framework import status
 from django.utils import timezone
 import datetime
-
+from stores.MyFunctions import get_or_none
+from dz_phone_number import DZPhoneNumber
 
 @api_view(['GET'])
 def getMagasins(request):
@@ -105,7 +107,6 @@ def createMagUsVisite(request, pk):
     user = request.user
     magasin = Magasin.objects.get(_id=pk)
     data = request.data
-    print(data)
     visite = Visite.objects.create(
           user=user,
           magasin=magasin,
@@ -114,3 +115,196 @@ def createMagUsVisite(request, pk):
 
     )
     return Response('Avis ajouté')
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createMagasin(request):
+    user=request.user
+    data = request.data
+    if(data.get('telephone')):
+        try:
+            DZPhoneNumber( data['telephone'])
+        except ValueError:
+            content = {'detail': 'Ce numéro de telephone est erroné!!'}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+            
+      
+
+
+    magasin = Magasin.objects.create(
+   
+        nom = data['nom'],
+   
+        categorie = Categorie.objects.get(_id=data['categorie']),
+
+        user=user
+
+    )
+
+    if(data.get('telephone')):
+         magasin.telephone = data['telephone']
+         magasin.save()
+    if(data.get('adresse')):
+         magasin.adresse = data['adresse']
+         magasin.save()
+    if(data.get('latitude') ):
+        try:
+            float(data['latitude']) 
+            magasin.latitude = data['latitude']
+            magasin.save()
+        except ValueError:
+         content = {'detail': 'La latitude doit etre un numeric!!'}
+         return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    if(data.get('longitude') ):
+        try:
+            float(data['longitude']) 
+            magasin.longitude = data['longitude']
+            magasin.save()
+        except ValueError:
+         content = {'detail': 'La longitude doit etre un numeric!!'}
+         return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    if(data.get('overture')):
+         magasin.overture= data['overture']
+         magasin.save()
+    if(data.get('fermeture')):
+         magasin.fermeture = data['fermeture']
+         magasin.save()
+    if(data.get('commune')):
+       
+        magasin.commune = get_or_none(Communes,id=data['commune'])
+        magasin.save()
+
+
+    user.is_merchant=True
+    user.save()
+    if(request.FILES.get('image')):
+        magasin.image =request.FILES.get('image')
+        magasin.save()
+    
+    serializer = MagasinsCreateSerializer(magasin, many=False)
+    return Response(serializer.data)
+#upload magasin image
+@api_view(['POST'])
+def uploadImage(request):
+    data = request.data
+
+    magasin_id = data['magasin_id']
+    magasin = Magasin.objects.get(_id=magasin_id)
+
+    magasin.image = request.FILES.get('image')
+    magasin.save()
+
+    return Response('Image was uploaded')
+
+#magasins du marchant
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getMarchantMagasins(request):
+    user = request.user
+    data = request.data
+    if user.is_merchant!=True:
+        content = {'detail': 'Vous avez pas encore crée votre mgasin!'}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        magasins=User.objects.get(id=user.id).magasin_set.all().order_by('-date_created')
+        page = request.query_params.get('page')
+        paginator = Paginator(magasins, 2)
+
+        try:
+            magasins = paginator.page(page)
+        except PageNotAnInteger:
+            magasins = paginator.page(1)
+        except EmptyPage:
+            magasins = paginator.page(paginator.num_pages)
+
+        if page == None:
+            page = 1
+
+        page = int(page)
+        print('Page:', page)
+        serializer = MagasinsSerializer(magasins, many=True)
+        return Response({'magasins': serializer.data, 'page': page, 'pages': paginator.num_pages})
+
+##update magasin
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateMagasin(request,pk):
+    user=request.user
+    data = request.data
+    magasin = Magasin.objects.get(_id=pk)
+    if(data.get('telephone')):
+        try:
+            DZPhoneNumber( data['telephone'])
+        except ValueError:
+            content = {'detail': 'Ce numéro de telephone est erroné!!'}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    
+    ##starting update
+    magasin.nom = data['nom']
+
+    magasin.categorie = Categorie.objects.get(_id=data['categorie'])
+    print(data['categorie'])
+
+    magasin.user=user
+
+    
+
+    if(data.get('telephone')):
+         magasin.telephone = data['telephone']
+         magasin.save()
+    if(data.get('adresse')):
+         magasin.adresse = data['adresse']
+         magasin.save()
+    if(data.get('latitude') ):
+        try:
+            float(data['latitude']) 
+            magasin.latitude = data['latitude']
+            magasin.save()
+        except ValueError:
+         content = {'detail': 'La latitude doit etre un numeric!!'}
+         return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    if(data.get('longitude') ):
+        try:
+            float(data['longitude']) 
+            magasin.longitude = data['longitude']
+            magasin.save()
+        except ValueError:
+         content = {'detail': 'La longitude doit etre un numeric!!'}
+         return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    if(data.get('overture')):
+         magasin.overture= data['overture']
+         magasin.save()
+    if(data.get('fermeture')):
+         magasin.fermeture = data['fermeture']
+         magasin.save()
+    if(data.get('commune')):
+       
+        magasin.commune = get_or_none(Communes,id=data['commune'])
+        magasin.save()
+
+
+    user.is_merchant=True
+    user.save()
+    if(request.FILES.get('image')):
+        magasin.image =request.FILES.get('image')
+        magasin.save()
+    
+    serializer = MagasinsCreateSerializer(magasin, many=False)
+    return Response(serializer.data)
+
+
+
+
+
+##supr mag
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteMagasin(request,pk):
+    user=request.user
+    magasin = Magasin.objects.get(_id=pk)
+    magasin.delete()
+    if(user.magasin_set.count()==0):
+            user.is_merchant=False
+            user.save()
+    return Response('Magasin Deleted')
