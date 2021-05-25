@@ -11,7 +11,8 @@ urlpatterns = [
     path('auth/', include('djoser.urls.jwt')),
     path('api/magasins/', include('stores.urls.magasin_urls')),
     path('api/categories/', include('stores.urls.categorie_urls')),
-    path('api/wilayas/', include('stores.urls.wilayas_urls'))
+    path('api/wilayas/', include('stores.urls.wilayas_urls')),
+    path('api/produits/', include('stores.urls.produit_urls'))
 ]
 urlpatterns += [re_path(r'^.*', TemplateView.as_view(template_name='index.html'))]
 

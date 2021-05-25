@@ -10,6 +10,7 @@ import ResetPasswordConfirm from './screens/ResetPasswordConfirm'
 import Activate from './screens/Activate'
 import CreateMagasin from './screens/CreateMagasin'
 import UpdateMagasin from './screens/UpdateMagasin'
+import CreateProduit from './screens/CreateProduit'
 import MagasinList from './screens/MagasinList'
 import ShopMarchantScreen from './screens/ShopMarchantScreen'
 import {BrowserRouter as Router,Route,Switch,withRouter  }from 'react-router-dom'
@@ -44,6 +45,7 @@ function App() {
             <Route path='/update-magasin/:id' component={UpdateMagasin} />
             <Route path='/marchant/magasinslist' component={MagasinList} />
             <Route path='/marchant/magasin/:id' component={ShopMarchantScreen} />
+            <Route path='/ajouter-produit/:id' component={CreateProduit} />
             </Switch>
             </Layout>
           

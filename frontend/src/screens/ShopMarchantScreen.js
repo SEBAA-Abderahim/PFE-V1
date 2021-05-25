@@ -7,7 +7,7 @@ import {Link,Redirect} from 'react-router-dom';
 import {Row,Col,Image,ListGroup,Button,Card,Form} from 'react-bootstrap'
 import Rating from '../components/Rating'
 import  magasins from '../magasins'
-import Produit from '../components/Produit'
+import ProduitMarchant from '../components/ProduitMarchant'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import { listMagasinDetails,deleteMagasin } from '../actions/mag'
@@ -92,7 +92,7 @@ useEffect(() => {
   dispatch(listMagasinDetails(match.params.id))
   
 
-}, [dispatch,magasin])
+}, [dispatch,magasin,match])
   
   
 
@@ -175,6 +175,9 @@ else{
   </Col>
   
         </Row>
+        <Link to={`/ajouter-produit/${match.params.id}`} >  <Button className='btn btn-dark my-3' size="md" block>
+    ajouter un produit dans le magasin
+  </Button></Link>
         {(() => {
               if (magasin.produits){
         return(
@@ -182,7 +185,7 @@ else{
             {
             magasin.produits.map(produit=>(
                     <Col   key={produit._id} md={11}  >
-                    <Produit produit={produit}/>
+                    <ProduitMarchant produit={produit}/>
                     </Col>
                 ))
 
