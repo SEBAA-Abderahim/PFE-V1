@@ -23,10 +23,10 @@ def getMagasins(request):
         query = ''
 
     magasins = Magasin.objects.filter(
-        nom__icontains=query).order_by('-date_created')
+        nom__icontains=query).order_by('-_id')
 
     page = request.query_params.get('page')
-    paginator = Paginator(magasins, 2)
+    paginator = Paginator(magasins, 48)
 
     try:
         magasins = paginator.page(page)
