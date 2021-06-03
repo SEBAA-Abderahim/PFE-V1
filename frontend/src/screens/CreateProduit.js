@@ -250,7 +250,7 @@ readonly="readonly"
     
     pattern="(^[+-]?([0-9]*[.])?[0-9]+$)"
     step="any"
-    maxlength="7"
+    maxlength="15"
     validate="true"
     placeholder="Entrer le prix du produit" 
      name='prix' value={prix} onChange={e=>onChange(e)}  />

@@ -111,7 +111,7 @@ class ProduitMag(models.Model):
     produit = models.ForeignKey(Produit, on_delete=models.CASCADE)
     magasin = models.ForeignKey(Magasin, on_delete=models.CASCADE)
     prix = models.DecimalField(
-        max_digits=7, decimal_places=2, null=True, blank=True)
+        max_digits=15, decimal_places=2, null=True, blank=True)
     date_created=models.DateTimeField(auto_now_add=True,null=True)
     _id = models.AutoField(primary_key=True, editable=False)
 
