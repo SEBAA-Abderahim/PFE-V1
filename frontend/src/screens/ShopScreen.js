@@ -10,7 +10,7 @@ import  magasins from '../magasins'
 import Produit from '../components/Produit'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import { listMagasinDetails,createMagasinReview,delete_msgMag,delete_errMag, createMagasinVisite } from '../actions/mag'
+import { listMagasinDetails,createMagasinReview,delete_msgMag,delete_errMag, createMagasinVisite,createMagasinRequete } from '../actions/mag'
 import { connect } from 'react-redux';
 
 const responsive = {
@@ -76,73 +76,27 @@ function ShopScreen({match,history,user, delete_msgMag,delete_errMag,isAuthentic
         
   })
     dispatch(listMagasinDetails(match.params.id))
-    
+
 
 }, [dispatch, match,magasin])
 
 
 
-//mag v
-//magasinvisite
-const magasinVisiteCreate = useSelector(state => state.magasinVisiteCreate)
-const {
-  loading: loadingMagasinVisite,
-  error: errorMagasinVisite,
-  success: successMagasinVisite,
-} = magasinVisiteCreate
-//useeeffect time
-const [time, setTime] = useState({
-  seconds: 0,
-  minutes: 0,
-  hours: 0,
-});
-useEffect(() => {
-  let isCancelled = false;
 
-  const advanceTime = () => {
-    setTimeout(() => {
-      let nSeconds = time.seconds;
-      let nMinutes = time.minutes;
-      let nHours = time.hours;
-
-      nSeconds++;
-
-      if (nSeconds > 59) {
-        nMinutes++;
-        nSeconds = 0;
-      }
-      if (nMinutes > 59) {
-        nHours++;
-        nMinutes = 0;
-      }
-      if (nHours > 24) {
-        nHours = 0;
-      }
-
-      !isCancelled && setTime({ seconds: nSeconds, minutes: nMinutes, hours: nHours });
-    }, 1000);
-  };
-  advanceTime();
-
-  return () => {
-    //final time:
-    console.log(time);
-    localStorage.setItem('time', JSON.stringify(time));
-    isCancelled = true;
-  
-  };
-}, [time]);
 useEffect(() => {
 
-  return () => {
+
       // do something
-  
-      if(isAuthenticated){
-        dispatch(createMagasinVisite(match.params.id,
-          JSON.parse(localStorage.getItem('time'))
-        ))
-      }
-  };
+    
+    if(match.params.keyword !== undefined && match.params.keyword !== "undefined"){
+      let keyword={keyword:match.params.keyword}
+      dispatch(createMagasinRequete(match.params.id,
+        keyword
+      ))
+     
+    }
+     
+
 }, []);
 
 

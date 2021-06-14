@@ -1,5 +1,6 @@
 
 
+
 from django.shortcuts import render, resolve_url
 
 from rest_framework.decorators import api_view, permission_classes
@@ -7,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from stores.models import Magasin,Review,Visite,Categorie, Communes,Wilayas,User
+from stores.models import Magasin,Review,Visite,Categorie, Communes,Wilayas,User,Requete
 from stores.serializers import MagasinSerializer,MagasinsSerializer,MagasinsCreateSerializer,CategorieSerializer,WilayasSerializer,CommunesSerializer
 
 from rest_framework import status
@@ -15,15 +16,55 @@ from django.utils import timezone
 import datetime
 from stores.MyFunctions import get_or_none
 from dz_phone_number import DZPhoneNumber
-
+from stores.Recherche import Recherche
+import json
 @api_view(['GET'])
 def getMagasins(request):
+    latuser =float(request.ipinfo.latitude)
+    longuser=float(request.ipinfo.longitude)
+    rec1=[]
+    rec2=[]
     query = request.query_params.get('keyword')
-    if query == None:
+    if query == None or query=="":
         query = ''
+        magasins = Magasin.objects.filter(nom__icontains=query).order_by('-_id').all()
+       
+    else:
+        mots=Recherche.normalizer_prod(query)
 
-    magasins = Magasin.objects.filter(
-        nom__icontains=query).order_by('-_id')
+
+        magasins=Magasin.objects.filter(prods__has_any_keys=mots).all()
+        if(Magasin.objects.filter(prods__has_any_keys=mots).count()!=0):
+            if Requete.objects.filter(motq=mots).count()==0:
+                req= Requete.objects.create(
+                motq=mots )
+            else:
+                req=Requete.objects.filter(motq=mots).get()
+            
+            for magasin in magasins:
+                magasin.scoreord=Recherche.Score_Ordononcement(mots,latuser,longuser,magasin)
+                
+            magasins = sorted(magasins, key=lambda magas:magas.scoreord,reverse=True) 
+
+            rec1=Magasin.objects.filter(prods__has_any_keys=list(req.metend)).all()
+            if Magasin.objects.filter(prods__has_any_keys=list(req.metend)).count()!=0:
+                for m in rec1:
+                    m.sc=Recherche.Score_OEXrdononcement(req,latuser,longuser,m)
+                rec1 = sorted(rec1, key=lambda magas:magas.sc,reverse=True)
+
+
+               
+          
+            res=dict(sorted(req.res.items(), key=lambda x: x[1],reverse=True))
+            id_list=list(res.keys())
+            id_list= [int(i) for i in id_list] 
+            rec2=Magasin.objects.filter(_id__in= id_list)
+            rec2=sorted(rec2, key=lambda i: id_list.index(i._id))
+            
+           
+
+    
+
 
     page = request.query_params.get('page')
     paginator = Paginator(magasins, 48)
@@ -41,7 +82,11 @@ def getMagasins(request):
     page = int(page)
     print('Page:', page)
     serializer = MagasinsSerializer(magasins, many=True)
-    return Response({'magasins': serializer.data, 'page': page, 'pages': paginator.num_pages})
+
+    serializer1 = MagasinsSerializer(rec2, many=True)
+    serializer0 = MagasinsSerializer(rec1, many=True)
+ 
+    return Response({'magasins': serializer.data, 'page': page, 'pages': paginator.num_pages,'rec1':serializer0.data,'rec2':serializer1.data})
 
 
 @api_view(['GET'])
@@ -308,3 +353,35 @@ def deleteMagasin(request,pk):
             user.is_merchant=False
             user.save()
     return Response('Magasin Deleted')
+
+
+
+@api_view(['POST'])
+def createMagUsRequete(request, pk):
+   
+    magasin = Magasin.objects.get(_id=pk)
+    data = request.data
+    mots=Recherche.normalizer_prod(data['keyword'])
+    cat=magasin.categorie_id
+    ext=list(magasin.prods.keys())
+    setext1 = set(ext)
+    setots = set(mots)
+    ext=list(setext1 - setots)
+    if Requete.objects.filter(motq=mots).count()!=0:
+        requete=Requete.objects.filter(motq=mots).get()
+        if cat not in requete.cats:
+           requete.cats.append(cat)
+        setext = set(ext)
+        setmetend = set(requete.metend)
+        ext=list(setext - setmetend)
+        requete.metend.extend(ext)
+        if str(magasin._id) in requete.res :
+                   requete.res.update({str(magasin._id):requete.res.get(str(magasin._id))+1})
+                   requete.save() 
+                 
+        if str(magasin._id) not in requete.res:
+                   requete.res.update({str(magasin._id):1})
+                   requete.save()
+
+
+    return Response('requete ajouté')

@@ -6,6 +6,7 @@ import {magasinDetailsReducer} from './mag';
 import {magasinReviewCreateReducer} from './mag';
 import {magasinVisiteCreateReducer} from './mag';
 import {magasinListMarchantReducer} from './mag';
+import {magasinRequeteCreateReducer} from './mag';
 
 export default combineReducers({
     auth,
@@ -13,5 +14,6 @@ export default combineReducers({
     magasinDetails:magasinDetailsReducer,
     magasinReviewCreate:magasinReviewCreateReducer,
     magasinVisiteCreate:magasinVisiteCreateReducer,
-    magasinListMarchant:magasinListMarchantReducer
+    magasinListMarchant:magasinListMarchantReducer,
+    magasinRequeteCreate:magasinRequeteCreateReducer
 });

@@ -35,7 +35,7 @@ function App() {
           <Layout>
                 <Switch>
             <Route path='/' component={HomeScreen}  exact/>
-            <Route path='/magasin/:id' component={ShopScreen} />
+            <Route path='/magasin/:keyword/:id' component={ShopScreen} />
             <Route path='/login' component={Login} />
             <Route path='/activate/:uid/:token' component={Activate} />
             <Route path='/signup' component={SignUp} />

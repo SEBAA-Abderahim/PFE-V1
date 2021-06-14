@@ -53,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'ipinfo_django.middleware.IPinfo',
 ]
 
 ROOT_URLCONF = 'ShopsDZ.urls'
@@ -183,3 +184,5 @@ DJOSER = {
 AUTH_USER_MODEL = 'stores.User'
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+

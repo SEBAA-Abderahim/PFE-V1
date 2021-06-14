@@ -3,13 +3,13 @@ import { Card} from 'react-bootstrap'
 import Rating from './Rating'
 import {Link} from 'react-router-dom'
 //we destractured the magasin prop we could do props.magasin but like this we only do it once
-function Magasin({magasin}) {
+function Magasin({magasin,keyword}) {
     return (
-        <Card className="my-3    rounded" >
-            <Link to={`/magasin/${magasin._id}`}>
+        <Card className="my-3    rounded    "  >
+            <Link to={`/magasin/${keyword}/${magasin._id}`}>
             <Card.Img style={{ height: '13rem' }} variant="top" src={process.env.REACT_APP_API_URL+'/static'+magasin.image}/></Link>
          <Card.Body>
-         <Link to={`/magasin/${magasin._id}`}>
+         <Link to={`/magasin/${keyword}/${magasin._id}`}>
             <Card.Title  as="div">
              <strong>{magasin.nom}</strong>  <p> <strong> {magasin.categorie}</strong></p>
                 </Card.Title>

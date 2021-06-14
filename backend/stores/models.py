@@ -2,7 +2,8 @@ from django.db import models
 # Create your models here.
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, PermissionsMixin)
 from django.db import models
-
+from django.db.models import JSONField 
+from django.contrib.postgres.fields import ArrayField
 
 class UserManager(BaseUserManager):
 
@@ -95,6 +96,7 @@ class Magasin(models.Model):
     categorie = models.ForeignKey(Categorie, on_delete=models.SET_NULL, null=True,blank=True)
     commune = models.ForeignKey(Communes, on_delete=models.SET_NULL, null=True,blank=True)
     _id = models.AutoField(primary_key=True, editable=False)
+    prods = JSONField(null=True,blank=True,default=dict)
     def __str__(self):
         return self.nom
 
@@ -139,3 +141,23 @@ class Visite(models.Model):
 
     def __str__(self):
         return str(self.user.username+"|"+self.magasin.nom)
+
+
+
+class ProdInd(models.Model):
+    nom = models.CharField(max_length=56)
+    mags = JSONField(null=True,blank=True,default=dict)
+    def __str__(self):
+        return self.nom
+
+
+class Requete(models.Model):
+    cats = ArrayField(models.IntegerField(), blank=True,null=True,default=list)
+    res = JSONField(null=True,blank=True,default=dict)
+    motq = ArrayField(models.CharField(max_length=200), blank=True,default=list)
+    metend = ArrayField(models.CharField(max_length=200), blank=True,null=True,default=list)
+    date_created=models.DateTimeField(auto_now_add=True,null=True)
+    _id = models.AutoField(primary_key=True, editable=False)
+
+    def __str__(self):
+        return str(self._id)

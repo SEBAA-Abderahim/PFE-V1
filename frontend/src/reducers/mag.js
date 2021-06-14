@@ -18,6 +18,10 @@ import {
     MAGASINMarchant_LIST_REQUEST,
     MAGASINMarchant_LIST_SUCCESS,
     MAGASINMarchant_LIST_FAIL,
+    MAGASIN_CREATE_REQUETE_REQUEST,
+    MAGASIN_CREATE_REQUETE_SUCCESS, 
+    MAGASIN_CREATE_REQUETE_FAIL, 
+    MAGASIN_CREATE_REQUETE_RESET 
   
 
 } from '../actions/types';
@@ -33,7 +37,9 @@ export const magasinListReducer = (state = { magasins: [] }, action) => {
                 loading: false,
                 magasins: action.payload.magasins,
                 page: action.payload.page,
-                pages: action.payload.pages
+                pages: action.payload.pages,
+                rec1: action.payload.rec1,
+                rec2:action.payload.rec2
             }
 
         case MAGASIN_LIST_FAIL:
@@ -134,3 +140,21 @@ export const magasinListMarchantReducer = (state = { magasins: [] }, action) => 
 }
 
 
+//crée requete
+export const magasinRequeteCreateReducer = (state = {}, action) => {
+    switch (action.type) {
+        case MAGASIN_CREATE_REQUETE_REQUEST:
+            return { loading: true }
+
+        case MAGASIN_CREATE_REQUETE_SUCCESS:
+            return { loading: false, success: true, }
+
+        case MAGASIN_CREATE_REQUETE_FAIL:
+            return { loading: false, error: action.payload }
+
+        case MAGASIN_CREATE_REQUETE_RESET:
+            return {}
+        default:
+            return state
+    }
+}

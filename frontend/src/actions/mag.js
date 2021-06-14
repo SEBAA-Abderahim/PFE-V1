@@ -16,7 +16,11 @@ import {
     MAGASIN_CREATE_VISITE_FAIL,
     MAGASINMarchant_LIST_REQUEST,
     MAGASINMarchant_LIST_SUCCESS,
-    MAGASINMarchant_LIST_FAIL
+    MAGASINMarchant_LIST_FAIL,
+    MAGASIN_CREATE_REQUETE_REQUEST,
+    MAGASIN_CREATE_REQUETE_SUCCESS, 
+    MAGASIN_CREATE_REQUETE_FAIL, 
+    MAGASIN_CREATE_REQUETE_RESET 
 
 
 
@@ -174,6 +178,39 @@ export const listMagasinsmarchant = (page=1) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: MAGASINMarchant_LIST_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}
+
+
+
+
+export const createMagasinRequete = (magasinId, keyword) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: MAGASIN_CREATE_REQUETE_REQUEST
+        })
+
+
+        
+
+        const { data } = await axios.post(
+            `${process.env.REACT_APP_API_URL}/api/magasins/${magasinId}/requetes/`,
+            keyword
+        )
+        dispatch({
+            type: MAGASIN_CREATE_REQUETE_SUCCESS,
+            payload: data,
+        })
+
+
+
+    } catch (error) {
+        dispatch({
+            type: MAGASIN_CREATE_REQUETE_FAIL,
             payload: error.response && error.response.data.detail
                 ? error.response.data.detail
                 : error.message,
