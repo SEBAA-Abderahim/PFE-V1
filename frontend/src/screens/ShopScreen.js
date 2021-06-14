@@ -106,6 +106,11 @@ useEffect(() => {
           <Link to='/' >  <Button className='btn btn-dark my-3' size="md" block>
     Retour a la page principale
   </Button></Link>
+
+
+  <Button className='btn btn-dark my-3' size="md" onClick={history.goBack} >
+    Retour a la page precedente
+  </Button>
   {loading ?
                 <Loader />
                 : error

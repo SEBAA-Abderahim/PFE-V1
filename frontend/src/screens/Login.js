@@ -66,7 +66,7 @@ function Login({login,isAuthenticated,error,delete_err}) {
   </Form.Group>
 
   <Button variant="primary" type="submit" >
-    Submit
+    se connecter
   </Button>
 </Form>
 <p className='mt-3'>

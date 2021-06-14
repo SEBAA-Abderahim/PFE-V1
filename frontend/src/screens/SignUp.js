@@ -110,7 +110,7 @@ function SignUp({ signup, isAuthenticated,error,message,delete_err,delete_msg,cr
 
    </Form.Group>
    <Button variant="primary" type="submit" >
-     Créez votre mot de passe
+     Créez votre compte
    </Button>
          </Form>
         </div>
