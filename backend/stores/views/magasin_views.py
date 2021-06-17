@@ -18,8 +18,10 @@ from stores.MyFunctions import get_or_none
 from dz_phone_number import DZPhoneNumber
 from stores.Recherche import Recherche
 import json
-@api_view(['GET'])
+@api_view(['POST'])
 def getMagasins(request):
+    print(request.data)
+    print(request.query_params.get('keyword'))
     latuser =float(request.ipinfo.latitude)
     longuser=float(request.ipinfo.longitude)
     rec1=[]
@@ -45,12 +47,15 @@ def getMagasins(request):
                 magasin.scoreord=Recherche.Score_Ordononcement(mots,latuser,longuser,magasin)
                 
             magasins = sorted(magasins, key=lambda magas:magas.scoreord,reverse=True) 
-
-            rec1=Magasin.objects.filter(prods__has_any_keys=list(req.metend)).all()
-            if Magasin.objects.filter(prods__has_any_keys=list(req.metend)).count()!=0:
-                for m in rec1:
-                    m.sc=Recherche.Score_OEXrdononcement(req,latuser,longuser,m)
-                rec1 = sorted(rec1, key=lambda magas:magas.sc,reverse=True)
+            if request.data['req']:
+                ms=Magasin.objects.filter(_id__in=request.data['req'])
+                exprds=list(set(Recherche.extract_prods(ms))-set(mots))
+                cts=Recherche.extract_cats(ms)
+                rec1=Magasin.objects.filter(prods__has_any_keys=exprds).all()
+                if Magasin.objects.filter(prods__has_any_keys=exprds).count()!=0:
+                   for m in rec1:
+                       m.sc=Recherche.Score_OEXrdononcement(req,latuser,longuser,m,cts,exprds)
+                   rec1 = sorted(rec1, key=lambda magas:magas.sc,reverse=True)
 
 
                
@@ -362,19 +367,11 @@ def createMagUsRequete(request, pk):
     magasin = Magasin.objects.get(_id=pk)
     data = request.data
     mots=Recherche.normalizer_prod(data['keyword'])
-    cat=magasin.categorie_id
-    ext=list(magasin.prods.keys())
-    setext1 = set(ext)
-    setots = set(mots)
-    ext=list(setext1 - setots)
+    
     if Requete.objects.filter(motq=mots).count()!=0:
         requete=Requete.objects.filter(motq=mots).get()
-        if cat not in requete.cats:
-           requete.cats.append(cat)
-        setext = set(ext)
-        setmetend = set(requete.metend)
-        ext=list(setext - setmetend)
-        requete.metend.extend(ext)
+        
+       
         if str(magasin._id) in requete.res :
                    requete.res.update({str(magasin._id):requete.res.get(str(magasin._id))+1})
                    requete.save() 

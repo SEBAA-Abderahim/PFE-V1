@@ -29,8 +29,14 @@ import {
 export const listMagasins = (keyword = '') => async (dispatch) => {
     try {
         dispatch({ type: MAGASIN_LIST_REQUEST })
-
-        const { data } = await axios.get(`${process.env.REACT_APP_API_URL}/api/magasins/${keyword}`)
+        let req=[]
+        let k=keyword?keyword.split('keyword=').pop().split('&')[0]!==""?keyword.split('keyword=').pop().split('&')[0]:undefined:undefined
+        if(keyword&&k&&k!==""){
+            
+            k=k.replace("%20"," ")
+         req=JSON.parse(localStorage.getItem(k.trim())) || [];
+        }
+        const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/api/magasins/${keyword}`,{"req":req})
 
         dispatch({
             type: MAGASIN_LIST_SUCCESS,

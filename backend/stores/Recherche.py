@@ -14,6 +14,7 @@ class Recherche:
     p1=0.5
     p2=0.3
     p3=0.2
+    sess=0
 # create addNumbers static method
     @staticmethod
     def distance(long1,lat1,long2,lat2):
@@ -181,24 +182,38 @@ class Recherche:
 
 
             
-    def Score_categorie(Q,M):
+    def Score_categorie(Q,M,cats):
         score=0
-        if M.categorie_id in Q.cats:
+        if M.categorie_id in cats:
             score=score+1
         score=score/len(list(Q.motq))
         return score
 
 
-    def Score_extension(Q,M):
-        score=Recherche.Score_Similarite(list(Q.motq),M)*Recherche.p1+Recherche.Score_Similarite(list(Q.metend),M)*Recherche.p2+Recherche.Score_categorie(Q,M)*Recherche.p3
+    def Score_extension(Q,M,cats,etend):
+        score=Recherche.Score_Similarite(list(Q.motq),M)*Recherche.p1+Recherche.Score_Similarite(list(etend),M)*Recherche.p2+Recherche.Score_categorie(Q,M,cats)*Recherche.p3
         return score
 
-    def Score_OEXrdononcement(Q,latus,longus,M):
-        score=Recherche.Score_extension(Q,M)*Recherche.w1+Recherche.Score_Géolocalisation(M,latus,longus)*Recherche.w2+Recherche.Score_Notation(M)*Recherche.w3+Recherche.Score_Comment(M)*Recherche.w4
+    def Score_OEXrdononcement(Q,latus,longus,M,cats,etend):
+        score=Recherche.Score_extension(Q,M,cats,etend)*Recherche.w1+Recherche.Score_Géolocalisation(M,latus,longus)*Recherche.w2+Recherche.Score_Notation(M)*Recherche.w3+Recherche.Score_Comment(M)*Recherche.w4
         return score
 
 
 
+    def extract_cats(mags):
+        cats=[]
+       
+        for m in mags:
+            cats.append(m.categorie_id)
+        return list(set(cats))
+    
+
+    def extract_prods(mags):
+        ps=[]
+       
+        for m in mags:
+            ps.extend(m.prods.keys())
+        return list(set(ps))
 
 
 

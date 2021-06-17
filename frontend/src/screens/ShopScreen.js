@@ -90,6 +90,12 @@ useEffect(() => {
     
     if(match.params.keyword !== undefined && match.params.keyword !== "undefined"){
       let keyword={keyword:match.params.keyword}
+      let vis = JSON.parse(localStorage.getItem(match.params.keyword)) || [];
+      if(!vis.includes(match.params.id)){
+        vis.push(match.params.id);
+        localStorage.setItem(match.params.keyword,JSON.stringify(vis))
+      }
+     
       dispatch(createMagasinRequete(match.params.id,
         keyword
       ))
