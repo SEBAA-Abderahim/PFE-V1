@@ -10,11 +10,13 @@ import { useHistory } from 'react-router-dom'
 const Layout = ({ match,checkAuthenticated, load_user,children }) => {
     const history = useHistory()
     useEffect(() => {
+        window.scrollTo(0, 0)
         checkAuthenticated();
         load_user();
         history.listen((location) => {
             checkAuthenticated();
             load_user();
+            window.scrollTo(0, 0)
         })
     }, []);
 

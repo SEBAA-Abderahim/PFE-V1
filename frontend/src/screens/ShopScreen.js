@@ -10,6 +10,7 @@ import  magasins from '../magasins'
 import Produit from '../components/Produit'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
+import Magasin from '../components/Magasin'
 import { listMagasinDetails,createMagasinReview,delete_msgMag,delete_errMag, createMagasinVisite,createMagasinRequete } from '../actions/mag'
 import { connect } from 'react-redux';
 
@@ -68,7 +69,7 @@ function ShopScreen({match,history,user, delete_msgMag,delete_errMag,isAuthentic
  
   //useeffect glob
   useEffect(() => {
-    
+  
     history.listen((location) => {
       delete_msgMag()
       delete_errMag()
@@ -87,8 +88,9 @@ useEffect(() => {
 
 
       // do something
-    
+      
     if(match.params.keyword !== undefined && match.params.keyword !== "undefined"){
+      
       let keyword={keyword:match.params.keyword}
       let vis = JSON.parse(localStorage.getItem(match.params.keyword)) || [];
       if(!vis.includes(match.params.id)){
@@ -101,6 +103,7 @@ useEffect(() => {
       ))
      
     }
+  
      
 
 }, []);
@@ -272,6 +275,38 @@ useEffect(() => {
                                         </Col>
                                         
                                         </Row>
+                                        {(() => {
+              if (magasin.recommendations&&magasin.recommendations.length>0){
+              
+              
+        
+           
+        return(
+             
+  
+            <Carousel responsive={responsive} >
+       
+         
+            {
+       
+              magasin.recommendations.map(m=>(
+                
+             <Col className=" d-flex align-self-stretch "   key={m._id}  md={11}  >
+
+                    <Magasin magasin={m} keyword={undefined}/>
+                    </Col>
+                  
+                ))
+              
+                }
+        
+              
+            
+       
+</Carousel>
+
+        )}    return null;
+      })()}
 </div>)}
         </div>
     )

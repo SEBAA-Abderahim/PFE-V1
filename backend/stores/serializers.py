@@ -3,6 +3,7 @@ from djoser.serializers import UserSerializer
 from .models import *
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+import json
 User = get_user_model()
 
 class UserCreateSerializer(UserCreateSerializer):
@@ -74,6 +75,7 @@ class MagasinSerializer(serializers.ModelSerializer):
     produits = serializers.SerializerMethodField(read_only=True)
     commune = serializers.SerializerMethodField(read_only=True)
     categorie = serializers.SerializerMethodField(read_only=True)
+    recommendations = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Magasin
         fields = '__all__'
@@ -96,6 +98,18 @@ class MagasinSerializer(serializers.ModelSerializer):
     def get_categorie(self, obj):
         categorie = obj.categorie
         serializer = CategorieSerializer(categorie, many=False)
+        return serializer.data
+    
+    def get_recommendations(self, obj):
+        a_file = open("clusters.json", "rb")
+        output = json.load(a_file)
+        recommendations = list(filter(lambda cluster:obj._id in cluster['mags'],output))
+        newset=set(recommendations[0]['mags'] )-set([obj._id])
+        if len(list(newset))!=0:
+            recommendations=Magasin.objects.filter(_id__in=list(newset)[0:10])
+        else:
+            recommendations=[]
+        serializer = MagasinsSerializer(recommendations, many=True)
         return serializer.data
 
 class MagasinsSerializer(serializers.ModelSerializer):
