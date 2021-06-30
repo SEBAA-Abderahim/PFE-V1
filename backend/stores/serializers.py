@@ -104,11 +104,15 @@ class MagasinSerializer(serializers.ModelSerializer):
         a_file = open("clusters.json", "rb")
         output = json.load(a_file)
         recommendations = list(filter(lambda cluster:obj._id in cluster['mags'],output))
-        newset=set(recommendations[0]['mags'] )-set([obj._id])
-        if len(list(newset))!=0:
-            recommendations=Magasin.objects.filter(_id__in=list(newset)[0:10])
+        if recommendations:
+           newset=set(recommendations[0]['mags'] )-set([obj._id])
+           if len(list(newset))!=0:
+              recommendations=Magasin.objects.filter(_id__in=list(newset)[0:10])
+           else:
+              recommendations=[]
         else:
             recommendations=[]
+
         serializer = MagasinsSerializer(recommendations, many=True)
         return serializer.data
 
