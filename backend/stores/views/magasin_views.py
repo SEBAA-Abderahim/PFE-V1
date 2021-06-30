@@ -20,8 +20,6 @@ from stores.Recherche import Recherche
 import json
 @api_view(['POST'])
 def getMagasins(request):
-    print(request.data)
-    print(request.query_params.get('keyword'))
     latuser =float(request.ipinfo.latitude)
     longuser=float(request.ipinfo.longitude)
     rec1=[]
@@ -85,7 +83,6 @@ def getMagasins(request):
         page = 1
 
     page = int(page)
-    print('Page:', page)
     serializer = MagasinsSerializer(magasins, many=True)
 
     serializer1 = MagasinsSerializer(rec2, many=True)
