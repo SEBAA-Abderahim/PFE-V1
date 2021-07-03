@@ -88,7 +88,7 @@ class Magasin(models.Model):
     overture = models.TimeField(null=True, blank=True)
     fermeture = models.TimeField(null=True, blank=True)
     rating = models.DecimalField(
-    max_digits=7, decimal_places=2, null=True, blank=True)
+    max_digits=7, decimal_places=2, null=True, blank=True,default=0)
     numReviews = models.IntegerField(null=True, blank=True, default=0)
     image = models.ImageField(null=True, blank=True,default='/shop-standart.jpg')
     date_created=models.DateTimeField(auto_now_add=True,null=True)

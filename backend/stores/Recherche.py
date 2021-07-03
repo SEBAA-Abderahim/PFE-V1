@@ -167,7 +167,7 @@ class Recherche:
         for mot in mots:
             if ProdInd.objects.filter(nom=mot).count()!=0:
                 p=ProdInd.objects.get(nom=mot)
-                if p.mags.get(str(M._id))!=0:
+                if M._id in p.mags and p.mags.get(str(M._id))!=0:
                     score=score+(1+p.mags.get(str(M._id))/sum(M.prods.values()))/2
         
         return score

@@ -6,17 +6,29 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 
-from stores.models import Categorie,ProduitMag,Magasin,Produit
+from stores.models import Categorie,ProduitMag,Magasin,Produit,ProdInd
 from stores.serializers import CategorieSerializer,ProduitMagSerializer,ProduitSerializer
 
 from rest_framework import status
+from stores.Recherche import Recherche 
 ##supr mag
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def deleteProduit(request,pk):
 
-    produit = ProduitMag.objects.get(_id=pk)
-    produit.delete()
+    prod = ProduitMag.objects.get(_id=pk)
+    magasin=prod.magasin
+    mots= Recherche.normalizer_prod(prod.produit.nom)
+    for mot in mots:
+        magasin.prods.update({mot:magasin.prods.get(mot)-1}) 
+        magasin.save()
+        p= ProdInd.objects.get(nom=mot)
+        p.mags.update({str(magasin._id):magasin.prods.get(p.nom)})
+        p.save()
+        if(magasin.prods.get(mot)==0):
+            magasin.prods.pop(mot)
+            magasin.save()
+    prod.delete()
    
     return Response('Produit Deleted')
 
@@ -84,7 +96,22 @@ def createProduit(request,pk):
             if(data.get('prix')):
                     produitmag.prix=data['prix']
                     produitmag.save()
+    mots=Recherche.normalizer_prod(produitmag.produit.nom)                
+    for mot in mots:
+        if mot in magasin.prods :
+            magasin.prods.update({mot:magasin.prods.get(mot)+1}) 
+            magasin.save()
+        if mot not in magasin.prods:
+            magasin.prods.update({mot:1})
+            magasin.save()
 
+        if(ProdInd.objects.filter(nom=mot).count()==0):
+            p=ProdInd.objects.create( nom=mot )
+        else:
+            p= ProdInd.objects.get(nom=mot)
+
+        p.mags.update({str(magasin._id):magasin.prods.get(p.nom)})
+        p.save()
     
     serializer = ProduitMagSerializer(produitmag, many=False)
     return Response(serializer.data)

@@ -46,23 +46,25 @@ def getMagasins(request):
                 
             magasins = sorted(magasins, key=lambda magas:magas.scoreord,reverse=True) 
             if request.data['req']:
-                ms=Magasin.objects.filter(_id__in=request.data['req'])
-                exprds=list(set(Recherche.extract_prods(ms))-set(mots))
-                cts=Recherche.extract_cats(ms)
-                rec1=Magasin.objects.filter(prods__has_any_keys=exprds).all()
-                if Magasin.objects.filter(prods__has_any_keys=exprds).count()!=0:
-                   for m in rec1:
-                       m.sc=Recherche.Score_OEXrdononcement(req,latuser,longuser,m,cts,exprds)
-                   rec1 = sorted(rec1, key=lambda magas:magas.sc,reverse=True)
+                if(Magasin.objects.filter(_id__in=request.data['req']).count!=0):
+                    ms=Magasin.objects.filter(_id__in=request.data['req'])
+                    exprds=list(set(Recherche.extract_prods(ms))-set(mots))
+                    cts=Recherche.extract_cats(ms)
+                    rec1=Magasin.objects.filter(prods__has_any_keys=exprds).all()
+                    if Magasin.objects.filter(prods__has_any_keys=exprds).count()!=0:
+                        for m in rec1:
+                            m.sc=Recherche.Score_OEXrdononcement(req,latuser,longuser,m,cts,exprds)
+                    rec1 = sorted(rec1, key=lambda magas:magas.sc,reverse=True)
 
 
                
           
             res=dict(sorted(req.res.items(), key=lambda x: x[1],reverse=True))
             id_list=list(res.keys())
-            id_list= [int(i) for i in id_list] 
-            rec2=Magasin.objects.filter(_id__in= id_list)
-            rec2=sorted(rec2, key=lambda i: id_list.index(i._id))
+            id_list= [int(i) for i in id_list]
+            if Magasin.objects.filter(_id__in= id_list).count()!=0: 
+               rec2=Magasin.objects.filter(_id__in= id_list)
+               rec2=sorted(rec2, key=lambda i: id_list.index(i._id))
             
            
 
