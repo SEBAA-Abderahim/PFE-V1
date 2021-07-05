@@ -34,7 +34,7 @@ export const listMagasins = (keyword = '') => async (dispatch) => {
         if(keyword&&k&&k!==""){
             
             k=k.replace("%20"," ")
-         req=JSON.parse(localStorage.getItem(k.trim())) || [];
+         req=JSON.parse(localStorage.getItem(k.trim().toLowerCase())) || [];
         }
         const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/api/magasins/${keyword}`,{"req":req})
 

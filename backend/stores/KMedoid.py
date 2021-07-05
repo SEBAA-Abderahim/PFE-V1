@@ -6,7 +6,7 @@ class KMedoid:
         if med.categorie_id==mag.categorie_id:
             return 0
         else:
-             return 2
+             return 15
     
     def distZone(med,mag):
         dist=Recherche.distance(med.latitude,med.longitude,mag.latitude,mag.longitude)
@@ -21,7 +21,7 @@ class KMedoid:
                  else :
                      if dist<50:
                          return 10
-                     else: return 15
+                     else: return 12
     def distProd(med,mag):
         setmedprod=set(med.prods)
         setmagprod=set(mag.prods)
