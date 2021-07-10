@@ -20,8 +20,13 @@ from stores.Recherche import Recherche
 import json
 @api_view(['POST'])
 def getMagasins(request):
-    latuser =float(request.ipinfo.latitude)
-    longuser=float(request.ipinfo.longitude)
+    if(request.ipinfo):
+        latuser =float(request.ipinfo.latitude)
+        longuser=float(request.ipinfo.longitude)
+    else:
+        latuser =0
+        longuser=0
+
     rec1=[]
     rec2=[]
     query = request.query_params.get('keyword')
